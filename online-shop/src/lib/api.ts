@@ -10,6 +10,7 @@ interface ProductResponse {
   data: Product;
 }
 
+
 export async function getProducts(): Promise<Product[]> {
   const response = await fetch(`${BASE_URL}/online-shop`, {
     cache: "no-store",
@@ -22,6 +23,7 @@ export async function getProducts(): Promise<Product[]> {
   const json: ProductsResponse = await response.json();
   return json.data;
 }
+
 
 export async function getProductById(id: string): Promise<Product> {
   const response = await fetch(`${BASE_URL}/online-shop/${id}`, {

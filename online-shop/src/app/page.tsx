@@ -12,6 +12,8 @@ export default async function Home() {
     error = "Unable to load products right now. Please try again later.";
   }
 
+  
+  
   return (
     <main className="min-h-screen bg-white px-6 py-10 md:px-10 lg:px-16">
       <section className="mx-auto max-w-7xl">

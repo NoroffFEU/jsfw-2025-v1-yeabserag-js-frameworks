@@ -33,6 +33,7 @@ export default async function ProductPage({ params }: PageProps) {
 
   const discounted = hasDiscount(product.price, product.discountedPrice);
 
+  
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="grid gap-10 md:grid-cols-2">
