@@ -3,25 +3,30 @@ import { Product } from "../../../types/product";
 import { hasDiscount } from "../../../lib/utils";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function ProductPage({ params }: PageProps) {
   let product: Product | null = null;
   let error = "";
 
+  const { id } = await params;
+
   try {
-    product = await getProductById(params.id);
-  } catch {
-    error = "Unable to load this product.";
+    product = await getProductById(id);
+  } catch (err) {
+    error =
+      err instanceof Error ? err.message : "Unable to load this product.";
   }
 
   if (error || !product) {
     return (
-      <main className="p-10">
-        <p className="text-red-600">{error}</p>
+      <main className="mx-auto max-w-4xl px-6 py-10">
+        <div className="border border-red-300 bg-red-50 p-4 text-sm text-red-700">
+          {error}
+        </div>
       </main>
     );
   }
@@ -31,7 +36,6 @@ export default async function ProductPage({ params }: PageProps) {
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="grid gap-10 md:grid-cols-2">
-
         <div className="border border-neutral-300 bg-neutral-50">
           <img
             src={product.image.url}
@@ -56,9 +60,7 @@ export default async function ProductPage({ params }: PageProps) {
                 </span>
               </>
             ) : (
-              <span className="font-semibold">
-                ${product.price.toFixed(2)}
-              </span>
+              <span className="font-semibold">${product.price.toFixed(2)}</span>
             )}
           </div>
 
@@ -66,14 +68,14 @@ export default async function ProductPage({ params }: PageProps) {
             Rating: {product.rating}/5
           </p>
 
-          <button className="border border-black px-6 py-2 text-sm hover:bg-black hover:text-white transition">
+          <button className="border border-black px-6 py-2 text-sm transition hover:bg-black hover:text-white">
             Add to Cart
           </button>
 
           {product.tags.length > 0 && (
             <div>
-              <h2 className="text-sm font-semibold mb-2">Tags</h2>
-              <div className="flex gap-2 flex-wrap">
+              <h2 className="mb-2 text-sm font-semibold">Tags</h2>
+              <div className="flex flex-wrap gap-2">
                 {product.tags.map((tag) => (
                   <span
                     key={tag}
@@ -88,8 +90,7 @@ export default async function ProductPage({ params }: PageProps) {
 
           {product.reviews.length > 0 && (
             <div>
-              <h2 className="text-sm font-semibold mb-2">Reviews</h2>
-
+              <h2 className="mb-2 text-sm font-semibold">Reviews</h2>
               <div className="space-y-3">
                 {product.reviews.map((review) => (
                   <div
@@ -105,7 +106,6 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
           )}
         </div>
-
       </div>
     </main>
   );
