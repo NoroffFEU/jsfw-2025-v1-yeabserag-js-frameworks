@@ -22,7 +22,7 @@ export default async function Home() {
             Online Shop
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-neutral-600">
-            A curated selection of products with a minimal shopping experience.
+            A selection of products brought by Noroff with a simple and easy shopping experience.
           </p>
         </div>
 
