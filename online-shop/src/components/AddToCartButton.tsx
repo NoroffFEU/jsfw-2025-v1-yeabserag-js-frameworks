@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { Product } from "../types/product";
 import toast from "react-hot-toast";
@@ -9,13 +10,10 @@ interface AddToCartButtonProps {
 }
 
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
-
+  const [isAdded, setIsAdded] = useState(false);
   const cart = useCart();
-  const addItem = cart.addToCart; // pulling this out so the handler looks cleaner
 
   function handleAddToCart() {
-
-    // creating a smaller object instead of passing the whole product
     const itemToAdd = {
       id: product.id,
       title: product.title,
@@ -23,21 +21,28 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
       imageUrl: product.image.url,
     };
 
-    addItem(itemToAdd);
+    cart.addToCart(itemToAdd);
+    toast.success(`${product.title} added to cart`);
 
-    // console.log("added product", itemToAdd); // used this while testing earlier
+    setIsAdded(true);
 
-    toast.success("Product added to cart");
+    window.setTimeout(() => {
+      setIsAdded(false);
+    }, 1800);
   }
-
-  const buttonText = "Add to Cart"; // might reuse later if I add icons or loading states
 
   return (
     <button
+      type="button"
       onClick={handleAddToCart}
-      className="border border-black px-6 py-2 text-sm transition hover:bg-black hover:text-white"
+      aria-live="polite"
+      className={`border px-6 py-2 text-sm transition ${
+        isAdded
+          ? "border-green-700 bg-green-700 text-white"
+          : "border-black text-black hover:bg-black hover:text-white"
+      }`}
     >
-      {buttonText}
+      {isAdded ? "Added ✓" : "Add to Cart"}
     </button>
   );
 }
